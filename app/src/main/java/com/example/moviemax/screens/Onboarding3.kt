@@ -22,10 +22,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.moviemax.R
+import com.example.moviemax.navigation.NavigationManager
 
 @Composable
-fun Onboarding3() {
+fun Onboarding3(navigationManager: NavigationManager) {
     Surface(
         color = Color(0xFF121212),
         modifier = Modifier.fillMaxSize()
@@ -92,7 +95,7 @@ fun Onboarding3() {
                     CircleIndicator(isSelected = true)
                 }
                 IconButton(
-                    onClick = { /* Navigate to next screen */ },
+                    onClick = { navigationManager.navigateToOnboarding1()},
                     modifier = Modifier
                         .padding(end = 16.dp)
                         .size(50.dp)
@@ -111,94 +114,8 @@ fun Onboarding3() {
 
 
 
-    /***
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        // Rating Section
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                imageVector = Icons.Default.Star,
-                                contentDescription = "Star Icon",
-                                tint = Color(0xFFFFD700), // Gold color for star
-                                modifier = Modifier.size(20.dp)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = "9 / 10",
-                                color = Color.White,
-                                fontSize = 14.sp
-                            )
-                        }
-
-                        // Duration Section
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.time),
-                                contentDescription = "Time Icon",
-                                tint = Color.Gray,
-                                modifier = Modifier.size(20.dp)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = "1h 20m",
-                                color = Color.White,
-                                fontSize = 14.sp
-                            )
-                        }
-                    }
-
-
-
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    // Bottom Navigation Section
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        // Dots Indicator
-                        Row {
-                            repeat(3) { index ->
-                                Box(
-                                    modifier = Modifier
-                                        .size(if (index == 0) 10.dp else 8.dp)
-                                        .clip(CircleShape)
-                                        .background(if (index == 0) Color(0xFF00DAC6) else Color.Gray)
-                                )
-                                Spacer(modifier = Modifier.width(4.dp))
-                            }
-                        }
-
-                        // Action Button
-                        Box(
-                            modifier = Modifier
-                                .size(56.dp)
-                                .clip(RoundedCornerShape(16.dp))
-                                .background(Color(0xFF00DAC6))
-                                .clickable { /* Handle button click */ },
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.ArrowForward,
-                                contentDescription = "Forward Arrow",
-                                tint = Color.White,
-                                modifier = Modifier.size(24.dp)
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-***/
-
 @Preview(showBackground = true)
 @Composable
 fun PreviewOnboarding3() {
-    Onboarding3()
+    Onboarding3(navigationManager = NavigationManager(rememberNavController()))
 }

@@ -18,11 +18,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.moviemax.R
+import com.example.moviemax.navigation.NavigationManager
 
 
 @Composable
-fun Onboarding2() {
+fun Onboarding2(navigationManager: NavigationManager) {
     Surface(
         color = Color(0xFF121212),
         modifier = Modifier.fillMaxSize()
@@ -88,7 +91,7 @@ fun Onboarding2() {
                     CircleIndicator(isSelected = false)
                 }
                 IconButton(
-                    onClick = { /* Navigate to next screen */ },
+                    onClick = { navigationManager.navigateToOnboarding3()},
                     modifier = Modifier
                         .padding(end = 16.dp)
                         .size(50.dp)
@@ -108,5 +111,5 @@ fun Onboarding2() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewOnboarding2() {
-    Onboarding2()
+    Onboarding2(navigationManager = NavigationManager(rememberNavController()))
 }

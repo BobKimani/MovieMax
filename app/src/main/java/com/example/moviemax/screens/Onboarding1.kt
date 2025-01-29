@@ -5,24 +5,28 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
 import androidx.compose.material3.*
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+
 import com.example.moviemax.R
+import com.example.moviemax.navigation.NavigationManager
 
 
 @Composable
-fun Onboarding1() {
+fun Onboarding1(navigationManager: NavigationManager) {
     Surface(
         color = Color(0xFF121212),
         modifier = Modifier.fillMaxSize()
@@ -88,10 +92,11 @@ fun Onboarding1() {
                     CircleIndicator(isSelected = false)
                 }
                 IconButton(
-                    onClick = { /* Navigate to next screen */ },
+                    onClick = { navigationManager.navigateToOnboarding2() },
                     modifier = Modifier
                         .padding(end = 16.dp)
-                        .size(80.dp)
+                        .size(80.dp),
+
                 ) {
                     Box(modifier = Modifier
                         .fillMaxSize()
@@ -123,5 +128,5 @@ fun CircleIndicator(isSelected: Boolean) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewOnboarding1() {
-    Onboarding1()
+    Onboarding1( navigationManager = NavigationManager(rememberNavController()))
 }

@@ -11,6 +11,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.example.moviemax.screens.Onboarding1
+import com.example.moviemax.screens.Onboarding2
+import com.example.moviemax.screens.Onboarding3
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import com.example.moviemax.navigation.navgraph
 import com.example.moviemax.ui.theme.MovieMaxTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,29 +26,22 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MovieMaxTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                navgraph()
             }
         }
     }
 }
 
+
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun MovieMaxApp() {
+
 }
+
+
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    MovieMaxTheme {
-        Greeting("Android")
-    }
+fun MyAppPreview() {
+   navgraph()
 }
