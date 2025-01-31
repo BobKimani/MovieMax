@@ -11,26 +11,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
-import com.example.moviemax.data.api.RetrofitInstance
 import com.example.moviemax.data.model.Movie
-import com.example.moviemax.data.model.MovieResponse
-import com.example.moviemax.data.repository.FakeMovieRepository
-import com.example.moviemax.data.repository.MovieRepository
-import com.example.moviemax.ui.components.BottomNavigationBar
 import com.example.moviemax.viewModel.MovieViewModel
+import com.example.moviemax.navigation.NavigationManager
+import com.example.moviemax.ui.components.BottomNavigationBar
 
 @Composable
 fun HomeScreen(
     movieViewModel: MovieViewModel,
     navigateToSearch: () -> Unit,
-    navigateToProfile: () -> Unit
+    navigateToProfile: () -> Unit,
+    navigationManager: NavigationManager
 ) {
-    val apiService = RetrofitInstance.apiService   // Assuming you have a method to create the ApiService instance
-    val movieRepository = MovieRepository(apiService)
-
     var selectedRoute by remember { mutableStateOf("home") }
 
     Scaffold(
@@ -100,26 +95,31 @@ fun MovieItem(movie: Movie) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .padding(vertical = 24.dp)
     ) {
         Image(
-            painter = rememberImagePainter(data = movie.poster_path),
+            painter = rememberAsyncImagePainter(movie.getPosterUrl()),
             contentDescription = movie.title,
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(100.dp)
-                .padding(end = 16.dp)
+                .padding(end = 20.dp)
         )
 
         Column(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxHeight()
         ) {
-            Text(text = movie.title, style = MaterialTheme.typography.titleMedium, color = Color.White)
+            Text(text = movie.title, style = MaterialTheme.typography.titleMedium, color = Color.Black)
+            Text(
+                text = "Vote average: ${movie.vote_average}",
+                style = MaterialTheme.typography.bodySmall,
+                color = Color.Black
+            )
             Text(
                 text = "Release Date: ${movie.release_date}",
                 style = MaterialTheme.typography.bodySmall,
-                color = Color.Gray
+                color = Color.Black
             )
         }
     }

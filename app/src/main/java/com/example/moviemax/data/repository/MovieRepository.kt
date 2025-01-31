@@ -1,5 +1,6 @@
 package com.example.moviemax.data.repository
 
+import com.example.moviemax.data.model.Movie
 import com.example.moviemax.data.api.ApiService
 import com.example.moviemax.data.model.MovieResponse
 import kotlinx.coroutines.Dispatchers
@@ -10,7 +11,7 @@ class MovieRepository(private val apiService: ApiService) {
 
     private val apiKey = "13cc8fa118ba32c74382251618881347"
 
-    suspend fun getMovies(): MovieResponse {
+    suspend fun getMovies(): Movie {
         return withContext(Dispatchers.IO) {
             try {
                 apiService.getMovies(apiKey)

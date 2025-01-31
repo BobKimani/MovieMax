@@ -12,7 +12,7 @@ class NavigationManager(private val navController: NavController) {
         navController.navigate("Onboarding3")
     }
 
-    fun navigateToOnboarding1() {
-        navController.navigate("Onboarding1")
+    fun navigateToHomeScreen() {
+        navController.navigate("HomeScreen")
     }
 }

@@ -67,6 +67,8 @@ dependencies {
     implementation(libs.retrofit.gson.converter)
     implementation(libs.coil.compose)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

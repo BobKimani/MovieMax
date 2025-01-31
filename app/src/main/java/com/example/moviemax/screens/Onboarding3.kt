@@ -95,7 +95,7 @@ fun Onboarding3(navigationManager: NavigationManager) {
                     CircleIndicator(isSelected = true)
                 }
                 IconButton(
-                    onClick = { navigationManager.navigateToOnboarding1()},
+                    onClick = { navigationManager.navigateToHomeScreen()},
                     modifier = Modifier
                         .padding(end = 16.dp)
                         .size(50.dp)

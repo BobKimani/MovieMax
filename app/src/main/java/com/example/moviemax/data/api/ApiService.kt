@@ -1,5 +1,6 @@
 package com.example.moviemax.data.api
 
+import com.example.moviemax.data.model.Movie
 import com.example.moviemax.data.model.MovieResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -7,18 +8,18 @@ import retrofit2.http.Query
 interface ApiService {
 
     // Get a list of popular movies
-    @GET("/favorite/movies")
+    @GET("movie/popular")
     suspend fun getMovies(
-        @Query("13cc8fa118ba32c74382251618881347") apiKey: String,
+        @Query("api_key") apiKey: String,
         @Query("language") language: String = "en-US",
         @Query("page") page: Int = 1
-    ): MovieResponse
+    ): Movie
 
     // Search for movies by query
-    @GET("/{account_id}/lists") // Correct endpoint for movie search
+    @GET("search/movie")
     suspend fun searchMovies(
         @Query("query") query: String,
-        @Query("13cc8fa118ba32c74382251618881347") apiKey: String,
+        @Query("api_key") apiKey: String,  // ✅ FIXED: Corrected API key parameter
         @Query("language") language: String = "en-US",
         @Query("page") page: Int = 1
     ): MovieResponse

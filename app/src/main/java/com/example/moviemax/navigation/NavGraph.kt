@@ -8,13 +8,19 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.moviemax.screens.HomeScreen
 import com.example.moviemax.screens.Onboarding1
 import com.example.moviemax.screens.Onboarding2
 import com.example.moviemax.screens.Onboarding3
 import com.example.moviemax.viewModel.MovieViewModel
 
 @Composable
-fun navgraph() {
+fun navgraph(
+    navController: NavController,
+    movieViewModel: MovieViewModel,
+    navigateToSearch: () -> Unit,
+    navigateToProfile: () -> Unit
+) {
     val navController = rememberNavController()
     val navigationManager = remember { NavigationManager(navController) }
 
@@ -23,5 +29,12 @@ fun navgraph() {
         composable("Onboarding1") { Onboarding1(navigationManager = navigationManager) }
         composable("Onboarding2") { Onboarding2(navigationManager = navigationManager) }
         composable("Onboarding3") { Onboarding3(navigationManager = navigationManager) }
+        composable("HomeScreen")  {
+            HomeScreen(
+                movieViewModel = movieViewModel,
+                navigateToSearch = navigateToSearch,
+                navigateToProfile = navigateToProfile,
+                navigationManager = navigationManager)
+        }
     }
 }
