@@ -1,6 +1,7 @@
 package com.example.moviemax.navigation
 
 import androidx.navigation.NavController
+import com.example.moviemax.data.model.Movie
 
 class NavigationManager(private val navController: NavController) {
 
@@ -15,4 +16,9 @@ class NavigationManager(private val navController: NavController) {
     fun navigateToHomeScreen() {
         navController.navigate("HomeScreen")
     }
+    fun navigateToMovieDetailScreen(movieId: Int) {
+        navController.navigate("MovieDetail/$movieId")
+    }
+
+
 }

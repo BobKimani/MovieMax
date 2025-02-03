@@ -5,13 +5,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.moviemax.data.api.RetrofitInstance
 import com.example.moviemax.data.repository.MovieRepository
-import com.example.moviemax.navigation.navgraph
+import com.example.moviemax.navigation.NavGraph
 import com.example.moviemax.ui.theme.MovieMaxTheme
 import com.example.moviemax.viewModel.MovieViewModel
 
@@ -23,18 +25,21 @@ class MainActivity : ComponentActivity() {
             MovieMaxTheme {
                 val navController = rememberNavController()
 
-                // Manually create the repository and ViewModel
-                val movieRepository = MovieRepository(RetrofitInstance.apiService)
-                val movieViewModel = MovieViewModel(movieRepository)
+                // Use ViewModel the correct way (scoped to activity)
+                val movieViewModel: MovieViewModel = viewModel {
+                    MovieViewModel(MovieRepository(RetrofitInstance.apiService))
+                }
 
                 Scaffold(
                     modifier = Modifier.fillMaxSize()
                 ) { paddingValues ->
-                    navgraph(
+                    // ✅ Pass paddingValues to ensure correct spacing
+                    NavGraph(
                         navController = navController,
                         movieViewModel = movieViewModel,
                         navigateToSearch = { /* TODO: Implement Search Screen Navigation */ },
-                        navigateToProfile = { /* TODO: Implement Profile Screen Navigation */ }
+                        navigateToProfile = { /* TODO: Implement Profile Screen Navigation */ },
+                        modifier = Modifier.padding(paddingValues) // ✅ Add this line
                     )
                 }
             }
