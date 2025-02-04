@@ -42,6 +42,8 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(paddingValues) // ✅ Add this line
                     )
                 }
+
+                val apiKey = RetrofitInstance.getApiKey(applicationContext)
             }
         }
     }

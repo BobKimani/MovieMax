@@ -6,6 +6,9 @@ plugins {
 android {
     namespace = "com.example.moviemax"
     compileSdk = 35
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "com.example.moviemax"
@@ -50,7 +53,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -65,7 +67,6 @@ dependencies {
     implementation(libs.coroutines.android)
     implementation(libs.lifecycle.runtime)
     implementation(libs.retrofit.gson.converter)
-    implementation(libs.coil.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)

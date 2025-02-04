@@ -1,5 +1,8 @@
 package com.example.moviemax.data.api
 
+import android.content.Context
+import android.content.pm.PackageManager
+import com.example.moviemax.BuildConfig
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -8,8 +11,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitInstance {
-    private const val BASE_URL = "https://api.themoviedb.org/3/"  // Ensure TMDB API URL is correct
-    private const val API_KEY = "13cc8fa118ba32c74382251618881347"  // Replace with your actual TMDB API Key
+    private const val BASE_URL = "https://api.themoviedb.org/3/"
+
+    fun getApiKey(context: Context): String {
+        val appInfo = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+        return appInfo.metaData.getString("TMDB_API_KEY", "") ?: ""
+    }
 
     // Logging Interceptor for debugging API requests/responses
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
