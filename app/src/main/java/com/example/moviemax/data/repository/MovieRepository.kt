@@ -1,5 +1,6 @@
 package com.example.moviemax.data.repository
 
+import com.example.moviemax.config.AppConfig
 import com.example.moviemax.data.model.Movie
 import com.example.moviemax.data.api.ApiService
 import com.example.moviemax.data.model.MovieResponse
@@ -12,12 +13,10 @@ import java.util.Locale
 
 class MovieRepository(private val apiService: ApiService) {
 
-    private val apiKey = "13cc8fa118ba32c74382251618881347"
-
     suspend fun getMovies(): Movie {
         return withContext(Dispatchers.IO) {
             try {
-                apiService.getMovies(apiKey)
+                apiService.getMovies(AppConfig.API_KEY)
             } catch (e: HttpException) {
                 throw Exception("Failed to load movies: ${e.message}")
             }
@@ -27,7 +26,7 @@ class MovieRepository(private val apiService: ApiService) {
     suspend fun searchMovies(query: String): MovieResponse {
         return withContext(Dispatchers.IO) {
             try {
-                apiService.searchMovies(query = query, apiKey = apiKey)
+                apiService.searchMovies(query = query, apiKey = AppConfig.API_KEY)
             } catch (e: HttpException) {
                 throw Exception("Failed to search movies: ${e.message}")
             }
