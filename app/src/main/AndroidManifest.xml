@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <meta-data
-        android:name="TMDB_API_KEY"
-        android:value="${API_KEY}" />
     <uses-permission android:name="android.permission.INTERNET" />
 
 
