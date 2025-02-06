@@ -13,4 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
-/app/main/java/com.example.moviemax/config/
+/app/main/java/com.example.moviemax/config/AppConfig.kt
