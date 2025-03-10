@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "836489703949",
+    "project_id": "moviemax-40987",
+    "storage_bucket": "moviemax-40987.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:836489703949:android:3c2bb875fbd9e10ad85b44",
+        "android_client_info": {
+          "package_name": "com.example.moviemax"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_id0qMZE_F37lHYVjzX2H-yJWGWo07R4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
