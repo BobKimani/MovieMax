@@ -74,6 +74,10 @@ dependencies {
     implementation(libs.coil.core)
     implementation(libs.coil.svg)
     implementation(libs.coil.video)
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.accompanist.pager)
+
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -1,7 +1,7 @@
-package com.example.moviemax.data.api
+package com.example.moviemax.api
 
-import com.example.moviemax.data.model.Movie
-import com.example.moviemax.data.model.MovieResponse
+import com.example.moviemax.model.Movie
+import com.example.moviemax.model.MovieResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

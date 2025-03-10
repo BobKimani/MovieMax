@@ -1,9 +1,7 @@
-package com.example.moviemax.viewModel
+package com.example.moviemax.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moviemax.data.model.Movie
-import com.example.moviemax.data.repository.MovieRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

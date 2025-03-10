@@ -1,4 +1,4 @@
-package com.example.moviemax.data.model
+package com.example.moviemax.model
 
 //  Represents the response from the API when fetching a list of movies.
 

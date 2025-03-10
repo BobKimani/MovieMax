@@ -1,15 +1,10 @@
-package com.example.moviemax.data.repository
+package com.example.moviemax.model
 
 import com.example.moviemax.config.AppConfig
-import com.example.moviemax.data.model.Movie
-import com.example.moviemax.data.api.ApiService
-import com.example.moviemax.data.model.MovieResponse
+import com.example.moviemax.api.ApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class MovieRepository(private val apiService: ApiService) {
 

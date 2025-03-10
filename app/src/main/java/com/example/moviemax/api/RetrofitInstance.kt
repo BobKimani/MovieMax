@@ -1,4 +1,4 @@
-package com.example.moviemax.data.api
+package com.example.moviemax.api
 
 //import android.content.Context
 //import android.content.pm.PackageManager

@@ -1,4 +1,4 @@
-package com.example.moviemax.data.model
+package com.example.moviemax.model
 
 import com.google.gson.annotations.SerializedName
 import java.text.SimpleDateFormat
