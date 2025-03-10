@@ -6,8 +6,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 //import com.example.moviemax.screens.HomeScreen
 import androidx.navigation.compose.rememberNavController
+import com.example.moviemax.model.AuthViewModel
 //import com.example.moviemax.screens.MovieDetailScreen
 import com.example.moviemax.screens.OnboardingScreen
+import com.example.moviemax.screens.SignInScreen
+import com.example.moviemax.screens.SignUpScreen
 
 
 sealed class Screen(val route: String) {
@@ -24,6 +27,7 @@ sealed class Screen(val route: String) {
 fun AppNavGraph(navController: NavHostController) {
 
     val NavController = rememberNavController()
+    val authViewModel = AuthViewModel()
 
     NavHost(navController = navController, startDestination = Screen.Onboarding.route) {
         composable(Screen.Onboarding.route) {
@@ -31,6 +35,16 @@ fun AppNavGraph(navController: NavHostController) {
                 navController.navigate(Screen.SignIn.route)
             })
         }
+
+        composable(Screen.SignIn.route) {
+            SignInScreen(navController, authViewModel)
+        }
+
+        composable(Screen.SignUp.route) {
+            SignUpScreen(navController, authViewModel)
+        }
+
+
 
 //        // Home Screen
 //        composable("HomeScreen") {

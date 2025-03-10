@@ -5,7 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
+import com.example.moviemax.model.AuthViewModel
 import com.example.moviemax.nav.AppNavGraph
+import com.example.moviemax.screens.SignInScreen
 import com.example.moviemax.ui.theme.MovieMaxTheme
 
 class MainActivity : ComponentActivity() {
@@ -14,6 +16,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MovieMaxTheme {
+
+//                SignInScreen(navController = rememberNavController(), viewModel = AuthViewModel())
 
 
                 AppNavGraph( navController = rememberNavController())

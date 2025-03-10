@@ -1,14 +1,13 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
     namespace = "com.example.moviemax"
     compileSdk = 35
-    buildFeatures {
-        buildConfig = true
-    }
 
     defaultConfig {
         applicationId = "com.example.moviemax"
@@ -41,6 +40,7 @@ android {
     }
     buildFeatures {
         compose = true
+
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -76,6 +76,7 @@ dependencies {
     implementation(libs.coil.video)
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.accompanist.pager)
+    implementation(libs.firebase.auth)
 
 
     testImplementation(libs.junit)
