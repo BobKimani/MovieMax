@@ -31,19 +31,11 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel) {
     var password by remember { mutableStateOf("") }
     val user by viewModel.user.collectAsStateWithLifecycle()
 
-    // Navigate to home screen if user is authenticated
+
     LaunchedEffect(user) {
         if (user != null) {
-            navController.navigate("home") {
-                popUpTo("signup") { inclusive = true }
-            }
-        }
-    }
-
-    fun onContinue() {
-        if (email.isNotBlank() && username.isNotBlank() && password.isNotBlank()) {
-            viewModel.signUp(email, password) {
-                navController.navigate("home")
+            navController.navigate(Screen.Home.route) {
+                popUpTo(Screen.SignUp.route) { inclusive = true }
             }
         }
     }
@@ -51,112 +43,66 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF121212)) // Dark background from onboarding
-            .padding(top = 50.dp, start = 15.dp, end = 15.dp),
+            .background(Color(0xFF121212))
+            .padding(top = 170.dp, start = 15.dp, end = 15.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.padding(top = 100.dp))
-
-        Text(
-            "Create Account",
-            fontSize = 30.sp,
-            color = Color.White, // White text to match onboarding
-            fontWeight = FontWeight.ExtraBold
-        )
-
+        Text("Create Account", fontSize = 30.sp, color = Color.White, fontWeight = FontWeight.ExtraBold)
         Spacer(modifier = Modifier.height(30.dp))
-
-        Text(
-            "Sign up with your email and password",
-            fontSize = 22.sp,
-            color = Color(0xFFB0B0B0) // Light gray from onboarding
-        )
-
+        Text("Sign up with your email and password", fontSize = 22.sp, color = Color(0xFFB0B0B0))
         Spacer(modifier = Modifier.height(20.dp))
 
         OutlinedTextField(
-            value = username,
-            onValueChange = { username = it },
-            label = { Text("Username", color = Color(0xFFB0B0B0)) },
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(24.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color(0xFF00D8D8), // Cyan accent from onboarding
-                unfocusedBorderColor = Color.Gray,
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White
-            )
+            value = username, onValueChange = { username = it }, label = { Text("Username", color = Color(0xFFB0B0B0)) },
+            modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp),
+            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = Color(0xFF00D8D8), unfocusedBorderColor = Color.Gray, focusedTextColor = Color.White, unfocusedTextColor = Color.White)
         )
 
         Spacer(modifier = Modifier.height(30.dp))
 
         OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email", color = Color(0xFFB0B0B0)) },
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(24.dp),
+            value = email, onValueChange = { email = it }, label = { Text("Email", color = Color(0xFFB0B0B0)) },
+            modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color(0xFF00D8D8), // Cyan accent from onboarding
-                unfocusedBorderColor = Color.Gray,
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White
-            )
+            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = Color(0xFF00D8D8), unfocusedBorderColor = Color.Gray, focusedTextColor = Color.White, unfocusedTextColor = Color.White)
         )
 
         Spacer(modifier = Modifier.height(30.dp))
 
         OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Password", color = Color(0xFFB0B0B0)) },
+            value = password, onValueChange = { password = it }, label = { Text("Password", color = Color(0xFFB0B0B0)) },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(24.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color(0xFF00D8D8), // Cyan accent from onboarding
-                unfocusedBorderColor = Color.Gray,
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White
-            )
+            modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp),
+            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = Color(0xFF00D8D8), unfocusedBorderColor = Color.Gray, focusedTextColor = Color.White, unfocusedTextColor = Color.White)
         )
 
         Spacer(modifier = Modifier.height(50.dp))
 
         Button(
-            onClick = { onContinue() },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(55.dp),
+            onClick = {
+                if (email.isNotBlank() && username.isNotBlank() && password.isNotBlank()) {
+                    viewModel.signUp(
+                        email, password,
+                        onSuccess = { navController.navigate(Screen.Home.route) },
+                        onError = { e -> println("Sign-up failed: ${e.message}") }
+                    )
+                }
+            },
+            modifier = Modifier.fillMaxWidth().height(55.dp),
             shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00D8D8)) // Cyan button
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00D8D8))
         ) {
-            Text(
-                "Continue",
-                fontSize = 22.sp,
-                color = Color.Black // Black text for contrast on cyan
-            )
+            Text("Continue", fontSize = 22.sp, color = Color.Black)
         }
 
-        Spacer(modifier = Modifier.height(35.dp))
+        Spacer(modifier = Modifier.height(90.dp))
 
         Row {
+            Text("Already have an account? ", fontSize = 20.sp, color = Color(0xFFB0B0B0), fontWeight = FontWeight.Bold)
             Text(
-                "Already have an account? ",
-                fontSize = 20.sp,
-                color = Color(0xFFB0B0B0),
-                fontWeight = FontWeight.Bold
-            )
-
-            Text(
-                "Sign In",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF00D8D8), // Cyan for link
-                textDecoration = TextDecoration.Underline,
-                modifier = Modifier.clickable { navController.navigate(Screen.SignIn.route) }
+                "Sign In", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color(0xFF00D8D8),
+                textDecoration = TextDecoration.Underline, modifier = Modifier.clickable { navController.navigate(Screen.SignIn.route) }
             )
         }
     }

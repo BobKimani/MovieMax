@@ -103,7 +103,19 @@ fun SignInScreen(navController: NavController, viewModel: AuthViewModel) {
         Spacer(modifier = Modifier.height(50.dp))
 
         Button(
-            onClick = { viewModel.signIn(email, password) },
+            onClick = {
+                viewModel.signIn(email, password,
+                    onSuccess = {
+                        navController.navigate(Screen.Home.route) {
+                            popUpTo(Screen.SignIn.route) { inclusive = true }
+                        }
+                    },
+                    onError = { e ->
+                        // Handle error (e.g., show a Toast or Snackbar)
+                        println("Error: ${e.message}")
+                    }
+                )
+            },
             modifier = Modifier
                 .height(55.dp)
                 .fillMaxWidth(),

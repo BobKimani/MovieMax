@@ -10,8 +10,10 @@ import com.example.moviemax.model.AuthViewModel
 import com.example.moviemax.model.MovieViewModel
 import com.example.moviemax.screens.MovieDetailScreen
 import com.example.moviemax.screens.OnboardingScreen
+import com.example.moviemax.screens.ProfileScreen
 import com.example.moviemax.screens.SignInScreen
 import com.example.moviemax.screens.SignUpScreen
+import com.google.firebase.auth.FirebaseAuth
 
 
 sealed class Screen(val route: String) {
@@ -30,6 +32,7 @@ fun AppNavGraph(navController: NavHostController) {
     val NavController = rememberNavController()
     val authViewModel = AuthViewModel()
     val movieViewModel = MovieViewModel()
+
 
     NavHost(navController = navController, startDestination = Screen.Onboarding.route) {
         composable(Screen.Onboarding.route) {
@@ -52,18 +55,22 @@ fun AppNavGraph(navController: NavHostController) {
         }
 
         // Movie Detail Screen
-        composable("MovieDetail/{movieId}") { backStackEntry ->
+        composable(Screen.MovieDetail.route) { backStackEntry ->
             val movieIdString = backStackEntry.arguments?.getString("movieId")
             val movieId = movieIdString?.toIntOrNull()
             val movie = movieViewModel.getMovieById(movieId ?: -1)
 
             if (movie != null) {
-                // Pass the movieId and navigationManager to MovieDetailScreen
+                // Pass the movieId to MovieDetailScreen
                 MovieDetailScreen(movie = movie, navController)
             } else {
                 // Handle invalid movieId (you can show an error or navigate back)
                 println("Invalid movieId")
             }
+        }
+
+        composable(Screen.Profile.route) {
+            ProfileScreen(navController, authViewModel)
         }
     }
 }

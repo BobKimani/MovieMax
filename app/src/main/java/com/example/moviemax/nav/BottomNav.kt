@@ -17,7 +17,7 @@ sealed class BottomNavItem(
 ) {
     object Home : BottomNavItem("Home", R.drawable.ic_home, "home")
     object Search : BottomNavItem("Search", R.drawable.ic_search, "search")
-    object Profile : BottomNavItem("Profile", R.drawable.ic_profile, "profile")
+    object Profile : BottomNavItem("Profile", R.drawable.profile, "profile")
 }
 
 @Composable
@@ -36,8 +36,8 @@ fun BottomNavigationBar(selectedRoute: String, onItemSelected: (String) -> Unit)
     }
 }
 
-@Preview
-@Composable
-fun BottomNavigationBarPreview() {
-    BottomNavigationBar(selectedRoute = "home") {}
-}
+//@Preview
+//@Composable
+//fun BottomNavigationBarPreview() {
+//    BottomNavigationBar(selectedRoute = "home") {}
+//}

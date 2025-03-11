@@ -7,8 +7,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
 import com.example.moviemax.model.AuthViewModel
 import com.example.moviemax.nav.AppNavGraph
+import com.example.moviemax.screens.ProfileScreen
 import com.example.moviemax.screens.SignInScreen
+import com.example.moviemax.screens.SignUpScreen
 import com.example.moviemax.ui.theme.MovieMaxTheme
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,10 +20,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             MovieMaxTheme {
 
-//                SignInScreen(navController = rememberNavController(), viewModel = AuthViewModel())
+                SignUpScreen(navController = rememberNavController(), viewModel = AuthViewModel())
 
 
-                AppNavGraph( navController = rememberNavController())
+//                AppNavGraph( navController = rememberNavController())
+
+//                ProfileScreen(navController = rememberNavController(), FirebaseAuth.getInstance())
+
+
 //                val navController = rememberNavController()
 //
 //                // Use ViewModel the correct way (scoped to activity)
