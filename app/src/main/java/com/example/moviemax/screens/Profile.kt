@@ -28,6 +28,8 @@ import com.example.moviemax.model.AuthViewModel
 
 @Composable
 fun ProfileScreen(navController: NavController, authViewModel: AuthViewModel = viewModel()) {
+
+    var selectedRoute by remember { mutableStateOf("profile") }
     var profileHeight by remember { mutableStateOf(150.dp) }
     val animatedProfileHeight by animateDpAsState(
         targetValue = profileHeight,
@@ -37,7 +39,7 @@ fun ProfileScreen(navController: NavController, authViewModel: AuthViewModel = v
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF141622))
+            .background(Color(0xFF1F1D2B))
             .padding(top = 55.dp)
     ) {
         LazyColumn(
@@ -54,10 +56,10 @@ fun ProfileScreen(navController: NavController, authViewModel: AuthViewModel = v
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(animatedProfileHeight)
-                        .background(Color(0xFF1F1D2B), shape = RoundedCornerShape(12.dp))
+                        .background(Color(0xFF141622), shape = RoundedCornerShape(12.dp))
                         .padding(16.dp)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(verticalAlignment = Alignment.CenterVertically,) {
                         Image(
                             painter = painterResource(id = R.drawable.ic_profile_placeholder),
                             contentDescription = "Profile Image",
@@ -69,11 +71,14 @@ fun ProfileScreen(navController: NavController, authViewModel: AuthViewModel = v
                         Column {
                             Text(
                                 text = userName,
-                                fontSize = 26.sp,
+                                fontSize = 24.sp,
                                 color = Color.White,
                                 fontWeight = FontWeight.Bold
                             )
-                            Text(text = userEmail, fontSize = 20.sp, color = Color.Gray)
+
+                            Spacer(Modifier.height(10.dp))
+
+                            Text(text = userEmail, fontSize = 18.sp, color = Color.Gray)
                         }
                     }
                 }
@@ -95,7 +100,6 @@ fun ProfileScreen(navController: NavController, authViewModel: AuthViewModel = v
             }
 
             item {
-                Spacer(modifier = Modifier.height(35.dp))
                 Button(
                     onClick = {
                         authViewModel.signOut {
@@ -116,10 +120,11 @@ fun ProfileScreen(navController: NavController, authViewModel: AuthViewModel = v
             }
         }
 
-        // Ensure BottomNavigationBar is visible
-        BottomNavigationBar(selectedRoute = "Profile") { route ->
-            navController.navigate(route)
-        }
+        BottomNavigationBar(
+            selectedRoute = "profile",
+            onItemSelected = { route -> navController.navigate(route) }
+        )
+
     }
 }
 
@@ -127,7 +132,7 @@ fun ProfileScreen(navController: NavController, authViewModel: AuthViewModel = v
 fun SectionHeader(title: String) {
     Text(
         text = title,
-        fontSize = 24.sp,
+        fontSize = 20.sp,
         color = Color.Gray,
         fontWeight = FontWeight.Bold,
         modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
@@ -143,8 +148,8 @@ fun ProfileOption(label: String, icon: ImageVector) {
             .clickable { },
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(imageVector = icon, contentDescription = label, tint = Color.White, modifier = Modifier.size(30.dp))
+        Icon(imageVector = icon, contentDescription = label, tint = Color.White, modifier = Modifier.size(25.dp))
         Spacer(modifier = Modifier.width(12.dp))
-        Text(text = label, fontSize = 20.sp, color = Color.White)
+        Text(text = label, fontSize = 17.sp, color = Color.White)
     }
 }

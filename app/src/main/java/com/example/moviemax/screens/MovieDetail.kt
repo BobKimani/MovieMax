@@ -99,7 +99,7 @@ fun MovieDetailScreen(movie: Movie,navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = { navController.navigate(Screen.Home.route)},
+                onClick = { },
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .height(50.dp),
@@ -140,7 +140,7 @@ fun MovieDetailScreen(movie: Movie,navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = {},
+                onClick = { navController.navigate(Screen.Home.route) },
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .height(50.dp),

@@ -16,8 +16,6 @@ class AuthViewModel : ViewModel() {
     private val _user = MutableStateFlow<FirebaseUser?>(auth.currentUser)
     val user: StateFlow<FirebaseUser?> = _user
 
-
-
     private val _isUserAuthenticated = MutableStateFlow(auth.currentUser != null)
     val isUserAuthenticated: StateFlow<Boolean> = _isUserAuthenticated
 
@@ -40,8 +38,13 @@ class AuthViewModel : ViewModel() {
     fun signUp(email: String, password: String, username: String, onSuccess: () -> Unit, onError: (Exception) -> Unit) {
         viewModelScope.launch {
             try {
-                auth.createUserWithEmailAndPassword(email, password).await()
-                _user.value = auth.currentUser
+                val result = auth.createUserWithEmailAndPassword(email, password).await()
+                val user = result.user
+                user?.updateProfile(userProfileChangeRequest {
+                    displayName = username
+                })?.await() // Wait for Firebase to update the profile
+
+                _user.value = auth.currentUser // Refresh user state
                 _isUserAuthenticated.value = true
                 onSuccess()
             } catch (e: Exception) {

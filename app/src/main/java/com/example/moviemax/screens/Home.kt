@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,6 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.moviemax.model.AuthViewModel
 import com.example.moviemax.model.Movie
 import com.example.moviemax.model.MovieViewModel
 import com.example.moviemax.nav.BottomNavigationBar
@@ -30,47 +33,59 @@ import com.google.firebase.auth.FirebaseAuth
 fun HomeScreen(
     navController: NavController,
     movieViewModel: MovieViewModel,
+    authViewModel: AuthViewModel,
     modifier: Modifier = Modifier
 ) {
-    var selectedRoute by remember { mutableStateOf("home") }
+    val user by authViewModel.user.collectAsState() // Observe user state
 
     Scaffold(
         bottomBar = {
             BottomNavigationBar(
                 selectedRoute = "home",
-                onItemSelected = { navController.navigate(it) },
-//                modifier = Modifier
-//                    .fillMaxWidth() // Ensure it spans the width
-//                    .background(Color(0xFF1F1D2B)) // Match container color
+                onItemSelected = { navController.navigate(it) }
             )
         },
-        containerColor = Color(0xFF1F1D2B),
-        modifier = modifier // Apply the modifier to Scaffold
+        modifier = modifier
     ) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues) // Apply Scaffold padding
+                .padding(paddingValues)
                 .background(Color(0xFF1F1D2B))
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp),
-                horizontalAlignment = Alignment.Start, // Horizontal alignment for children
-                verticalArrangement = Arrangement.Top // Vertical arrangement for children
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Top
             ) {
-                Text(
-                    text = "Hello, User",
-                    style = MaterialTheme.typography.headlineMedium.copy(
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
-                )
-                Text(
-                    text = "Let's stream your favorite movie",
-                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.LightGray)
-                )
+                // Greeting Row with Search Button
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text(
+                            text = "Wagwan, ${user?.displayName ?: "User"}",
+                            style = MaterialTheme.typography.headlineMedium.copy(
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
+                        Text(
+                            text = "Let's stream your favorite movie",
+                            style = MaterialTheme.typography.bodyMedium.copy(color = Color.LightGray)
+                        )
+                    }
+
+                    // Search Icon Button
+                    IconButton(onClick = { navController.navigate(Screen.Search.route) }) {
+                        Icon(Icons.Filled.Search, contentDescription = "Search Icon", tint = Color.White)
+                    }
+                }
+
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Movie List
@@ -80,8 +95,9 @@ fun HomeScreen(
     }
 }
 
+
 @Composable
-fun MovieListScreen(movieViewModel: MovieViewModel,navController: NavController) {
+fun MovieListScreen(movieViewModel: MovieViewModel, navController: NavController) {
     val movieState by movieViewModel.movies.collectAsState()
 
     LaunchedEffect(Unit) {
@@ -115,9 +131,9 @@ fun MovieListScreen(movieViewModel: MovieViewModel,navController: NavController)
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(16.dp)
             ) {
-                items(movieState.data ?: emptyList()) { movie ->  // Ensure data is not null
+                items(movieState.data ?: emptyList()) { movie ->
                     MovieItem(movie = movie, onClick = {
-                        navController.navigate(Screen.SignUp.route)
+                        navController.navigate("movie_detail/${movie.id}")
                     })
                 }
             }
@@ -125,13 +141,12 @@ fun MovieListScreen(movieViewModel: MovieViewModel,navController: NavController)
     }
 }
 
-
 @Composable
 fun MovieItem(movie: Movie, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() }
+            .clickable { onClick() } // Fixed navigation issue
             .padding(8.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF252836)),
         shape = RoundedCornerShape(12.dp),

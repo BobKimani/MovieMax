@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.moviemax.model.AuthViewModel
 import com.example.moviemax.nav.AppNavGraph
+import com.example.moviemax.screens.HomeScreen
 import com.example.moviemax.screens.OnboardingScreen
 import com.example.moviemax.screens.ProfileScreen
 import com.example.moviemax.screens.SignInScreen
@@ -21,7 +22,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MovieMaxTheme {
+
+                val navController = rememberNavController()
                 AppNavGraph( navController = rememberNavController())
+
+
+//                HomeScreen(navController = rememberNavController(), movieViewModel = viewModel())
             }
         }
     }
