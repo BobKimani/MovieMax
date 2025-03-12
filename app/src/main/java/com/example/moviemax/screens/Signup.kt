@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.moviemax.model.AuthViewModel
 import com.example.moviemax.nav.Screen
+import com.google.firebase.auth.userProfileChangeRequest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,6 +31,10 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val user by viewModel.user.collectAsStateWithLifecycle()
+
+    val profileUpdates = userProfileChangeRequest {
+        displayName = username
+    }
 
 
     LaunchedEffect(user) {
@@ -83,9 +88,10 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel) {
             onClick = {
                 if (email.isNotBlank() && username.isNotBlank() && password.isNotBlank()) {
                     viewModel.signUp(
-                        email, password,
+                        email, password,username,
                         onSuccess = { navController.navigate(Screen.Home.route) },
-                        onError = { e -> println("Sign-up failed: ${e.message}") }
+                        onError = { e -> println("Sign-up failed: ${e.message}") },
+
                     )
                 }
             },

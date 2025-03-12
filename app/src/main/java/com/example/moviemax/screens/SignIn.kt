@@ -45,7 +45,7 @@ fun SignInScreen(navController: NavController, viewModel: AuthViewModel) {
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF121212)) // Dark background from onboarding
-            .padding(top = 50.dp, start = 15.dp, end = 15.dp),
+            .padding(top = 90.dp, start = 15.dp, end = 15.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.padding(top = 100.dp))
@@ -65,7 +65,7 @@ fun SignInScreen(navController: NavController, viewModel: AuthViewModel) {
             color = Color(0xFFB0B0B0), // Light gray from onboarding
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(50.dp))
 
         OutlinedTextField(
             value = email,

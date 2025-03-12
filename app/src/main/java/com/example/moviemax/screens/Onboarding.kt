@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -17,14 +18,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
 import com.example.moviemax.R
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun OnboardingScreen( onContinue: () -> Unit) {
+fun OnboardingScreen(onContinue: () -> Unit) {
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -58,37 +58,47 @@ fun OnboardingScreen( onContinue: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Dots indicator
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     repeat(3) { index ->
                         CircleIndicator(isSelected = pagerState.currentPage == index)
                     }
                 }
 
-                // Next/Finish button
-                IconButton(
-                    onClick = {
-                        if (pagerState.currentPage < 2) {
-                            coroutineScope.launch {
-                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                            }
-                        } else {
-                            onContinue()
-                        }
-                    },
-                    modifier = Modifier.size(50.dp)
+                // Next/Finish button with fixed visibility
+                Box(
+                    modifier = Modifier
+                        .size(80.dp) // Make sure the whole button is visible
+                        .clip(CircleShape)
+                        .background(Color.Transparent),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.button),
-                        contentDescription = "Next",
-                        modifier = Modifier.fillMaxSize()
-                    )
+                    IconButton(
+                        onClick = {
+                            if (pagerState.currentPage < 2) {
+                                coroutineScope.launch {
+                                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                                }
+                            } else {
+                                onContinue()
+                            }
+                        },
+                        modifier = Modifier
+                            .size(100.dp) // Ensure button is large enough
+                            .padding(8.dp) // Keep it separate from any constraints
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.button),
+                            contentDescription = "Next",
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
                 }
             }
         }
     }
 }
+
 
 @Composable
 fun OnboardingPage1() {
@@ -237,5 +247,5 @@ fun CircleIndicator(isSelected: Boolean) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewOnboarding() {
-    OnboardingScreen( onContinue = {})
+    OnboardingScreen(onContinue = {})
 }

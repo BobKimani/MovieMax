@@ -23,13 +23,14 @@ import com.example.moviemax.model.Movie
 import com.example.moviemax.model.MovieViewModel
 import com.example.moviemax.nav.BottomNavigationBar
 import com.example.moviemax.nav.Screen
+import com.google.firebase.auth.FirebaseAuth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
     movieViewModel: MovieViewModel,
-    modifier: Modifier = Modifier // Added modifier parameter with default value
+    modifier: Modifier = Modifier
 ) {
     var selectedRoute by remember { mutableStateOf("home") }
 

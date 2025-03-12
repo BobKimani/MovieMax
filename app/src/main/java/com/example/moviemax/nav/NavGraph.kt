@@ -32,6 +32,7 @@ fun AppNavGraph(navController: NavHostController) {
     val NavController = rememberNavController()
     val authViewModel = AuthViewModel()
     val movieViewModel = MovieViewModel()
+    val auth = FirebaseAuth.getInstance()
 
 
     NavHost(navController = navController, startDestination = Screen.Onboarding.route) {

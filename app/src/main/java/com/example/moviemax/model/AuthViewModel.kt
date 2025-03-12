@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.userProfileChangeRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -14,6 +15,8 @@ class AuthViewModel : ViewModel() {
 
     private val _user = MutableStateFlow<FirebaseUser?>(auth.currentUser)
     val user: StateFlow<FirebaseUser?> = _user
+
+
 
     private val _isUserAuthenticated = MutableStateFlow(auth.currentUser != null)
     val isUserAuthenticated: StateFlow<Boolean> = _isUserAuthenticated
@@ -34,7 +37,7 @@ class AuthViewModel : ViewModel() {
     }
 
     // SignUp method
-    fun signUp(email: String, password: String, onSuccess: () -> Unit, onError: (Exception) -> Unit) {
+    fun signUp(email: String, password: String, username: String, onSuccess: () -> Unit, onError: (Exception) -> Unit) {
         viewModelScope.launch {
             try {
                 auth.createUserWithEmailAndPassword(email, password).await()
