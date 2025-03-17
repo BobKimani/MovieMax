@@ -44,7 +44,7 @@ fun SignInScreen(navController: NavController, viewModel: AuthViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF121212)) // Dark background from onboarding
+            .background(Color(0xFF1F1D2B)) // Dark background from onboarding
             .padding(top = 90.dp, start = 15.dp, end = 15.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
