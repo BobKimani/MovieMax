@@ -19,6 +19,12 @@ class AuthViewModel : ViewModel() {
     private val _isUserAuthenticated = MutableStateFlow(auth.currentUser != null)
     val isUserAuthenticated: StateFlow<Boolean> = _isUserAuthenticated
 
+    init {
+        auth.signOut()
+        _user.value = null
+        _isUserAuthenticated.value = false
+    }
+
     // SignIn method
     fun signIn(email: String, password: String, onSuccess: () -> Unit, onError: (Exception) -> Unit) {
         viewModelScope.launch {

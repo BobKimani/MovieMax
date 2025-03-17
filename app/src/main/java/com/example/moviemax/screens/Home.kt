@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -73,9 +74,10 @@ fun HomeScreen(
                             text = "Wagwan, ${user?.displayName ?: "User"}",
                             style = MaterialTheme.typography.headlineMedium.copy(
                                 color = Color.White,
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.ExtraBold
                             )
                         )
+                        Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = "Let's stream your favorite movie",
                             style = MaterialTheme.typography.bodyMedium.copy(color = Color.LightGray)
@@ -83,8 +85,8 @@ fun HomeScreen(
                     }
 
                     // Search Icon Button
-                    IconButton(onClick = { navController.navigate(Screen.Search.route) }) {
-                        Icon(Icons.Filled.Search, contentDescription = "Search Icon", tint = Color.White)
+                    IconButton(onClick = { }) {
+                        Icon(Icons.Filled.Favorite, contentDescription = "Search Icon", tint = Color.White)
                     }
                 }
                 Spacer(modifier = Modifier.height(20.dp))
@@ -122,7 +124,7 @@ fun SearchBar(navController: NavController) {
             },
         enabled = false, // Disable text input
         colors = OutlinedTextFieldDefaults.colors(
-            disabledBorderColor = Color.Gray,
+            disabledBorderColor = Color.White,
             disabledTextColor = Color.White,
             disabledPlaceholderColor = Color.Gray,
             disabledLeadingIconColor = Color.White
@@ -211,7 +213,7 @@ fun MovieListScreen(movieViewModel: MovieViewModel, navController: NavController
                 color = Color.White,
                 fontWeight = FontWeight.Bold
             ),
-            modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 8.dp)
+            modifier = Modifier.padding(start = 10.dp, top = 5.dp, bottom = 8.dp)
         )
 
         when {
