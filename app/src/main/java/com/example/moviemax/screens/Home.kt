@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -14,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -37,7 +39,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     val user by authViewModel.user.collectAsState() // Observe user state
-
+    val movieState by movieViewModel.movies.collectAsState() // Observe movie state
     Scaffold(
         bottomBar = {
             BottomNavigationBar(
@@ -56,7 +58,7 @@ fun HomeScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp),
+                    .padding(top = 35.dp, start = 16.dp, end = 10.dp),
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Top
             ) {
@@ -85,11 +87,109 @@ fun HomeScreen(
                         Icon(Icons.Filled.Search, contentDescription = "Search Icon", tint = Color.White)
                     }
                 }
+                Spacer(modifier = Modifier.height(20.dp))
+
+                SearchBar(navController)
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                FeaturedCarousel(movieState.data ?: emptyList(), navController)
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+
+
                 // Movie List
                 MovieListScreen(movieViewModel, navController)
+            }
+        }
+    }
+}
+
+@Composable
+fun SearchBar(navController: NavController) {
+    OutlinedTextField(
+        value = "",
+        onValueChange = { /* No typing functionality needed */ },
+        placeholder = { Text("Search for a movie") },
+        leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Search Icon") },
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .padding(bottom = 10.dp)
+            .clickable {
+                navController.navigate(Screen.Search.route)
+            },
+        enabled = false, // Disable text input
+        colors = OutlinedTextFieldDefaults.colors(
+            disabledBorderColor = Color.Gray,
+            disabledTextColor = Color.White,
+            disabledPlaceholderColor = Color.Gray,
+            disabledLeadingIconColor = Color.White
+        )
+    )
+}
+
+@Composable
+fun FeaturedCarousel(
+    movies: List<Movie>,
+    navController: NavController
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(horizontal = 4.dp)
+        ) {
+            items(movies) { movie ->
+                Card(
+                    modifier = Modifier
+                        .width(160.dp)
+                        .height(220.dp)
+                        .clickable {
+                            navController.navigate("movie_detail/${movie.id}")
+                        },
+                    colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+                    shape = RoundedCornerShape(12.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                ) {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Image(
+                            painter = rememberAsyncImagePainter(movie.getPosterUrl()),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(12.dp))
+                        )
+                        // Gradient overlay at the bottom
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(
+                                    Brush.verticalGradient(
+                                        colors = listOf(Color.Transparent, Color.Black),
+                                        startY = 150f
+                                    )
+                                )
+                        )
+                        // Movie title at the bottom
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.BottomStart)
+                                .padding(8.dp)
+                        ) {
+                            Text(
+                                text = movie.title ?: "No Title",
+                                style = MaterialTheme.typography.bodyMedium.copy(
+                                    color = Color.White,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -104,37 +204,51 @@ fun MovieListScreen(movieViewModel: MovieViewModel, navController: NavController
         movieViewModel.fetchMovies()
     }
 
-    when {
-        movieState.isLoading -> {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                CircularProgressIndicator(color = Color.White)
+    Column(modifier = Modifier.fillMaxSize()) {
+        Text(
+            text = "Available Movies",
+            style = MaterialTheme.typography.headlineSmall.copy(
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            ),
+            modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 8.dp)
+        )
+
+        when {
+            movieState.isLoading -> {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                    CircularProgressIndicator(color = Color.White)
+                }
             }
-        }
-        movieState.error != null -> {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                Text(
-                    text = "Failed to load movies: ${movieState.error}",
-                    color = Color.Red
-                )
+            movieState.error != null -> {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                    Text(
+                        text = "Failed to load movies: ${movieState.error}",
+                        color = Color.Red
+                    )
+                }
             }
-        }
-        movieState.data.isNullOrEmpty() -> {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                Text(
-                    text = "No movies available",
-                    color = Color.Gray
-                )
+            movieState.data.isNullOrEmpty() -> {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                    Text(
+                        text = "No movies available",
+                        color = Color.Gray
+                    )
+                }
             }
-        }
-        else -> {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp)
-            ) {
-                items(movieState.data ?: emptyList()) { movie ->
-                    MovieItem(movie = movie, onClick = {
-                        navController.navigate("movie_detail/${movie.id}")
-                    })
+            else -> {
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp)
+                ) {
+                    items(movieState.data ?: emptyList()) { movie ->
+                        MovieItem(movie = movie, onClick = {
+                            navController.navigate("movie_detail/${movie.id}")
+                        })
+                    }
                 }
             }
         }
@@ -145,51 +259,36 @@ fun MovieListScreen(movieViewModel: MovieViewModel, navController: NavController
 fun MovieItem(movie: Movie, onClick: () -> Unit) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() } // Fixed navigation issue
-            .padding(8.dp),
+            .width(160.dp)
+            .clickable { onClick() } // Navigate to detail screen
+            .padding(vertical = 8.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF252836)),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        Column(
+            modifier = Modifier.padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             Image(
                 painter = rememberAsyncImagePainter(movie.getPosterUrl()),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(120.dp)
-                    .clip(RoundedCornerShape(8.dp)),
+                    .height(200.dp)
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(10.dp)),
                 contentScale = ContentScale.Crop
             )
 
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                Text(
-                    text = movie.title ?: "Unknown Title",
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Text(
-                    text = "Year: ${movie.releaseDate ?: "Unknown"}",
-                    style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
-                )
-                Text(
-                    text = "Rating: ${movie.voteAverage ?: "Unknown"}",
-                    style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
-                )
-            }
+            Text(
+                text = movie.title ?: "Unknown Title",
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    color = Color.White,
+                    fontWeight = FontWeight.SemiBold
+                ),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         }
     }
 }

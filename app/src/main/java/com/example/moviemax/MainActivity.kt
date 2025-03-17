@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
                 AppNavGraph( navController = rememberNavController())
 
 
-//                HomeScreen(navController = rememberNavController(), movieViewModel = viewModel())
+//                HomeScreen(navController = rememberNavController(), movieViewModel = viewModel(), authViewModel = viewModel())
             }
         }
     }

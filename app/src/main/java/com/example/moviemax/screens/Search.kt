@@ -89,7 +89,7 @@ fun SearchScreen(navController: NavController, movieViewModel: MovieViewModel) {
                     modifier = Modifier.fillMaxSize()
                 ) {
                     items(filteredMovies) { movie ->
-                        MovieItem(movie = movie, onClick = {
+                        MovieItems(movie = movie, onClick = {
                             navController.navigate("movie_detail/${movie.id}")
                         })
                     }
@@ -135,8 +135,14 @@ fun MovieItems(movie: Movie, onClick: () -> Unit) {
                         fontWeight = FontWeight.Bold
                     )
                 )
+                Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = "Release Date: ${movie.releaseDate}",
+                    text = "\uD83C\uDFAC : ${movie.releaseDate}",
+                    style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = "\uD83C\uDF1F : ${movie.voteAverage}",
                     style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
                 )
             }
