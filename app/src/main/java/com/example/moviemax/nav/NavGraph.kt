@@ -40,7 +40,7 @@ fun AppNavGraph(navController: NavHostController) {
 
     NavHost(navController = navController, startDestination = Screen.Onboarding.route) {
         composable(Screen.Onboarding.route) {
-            OnboardingScreen(onContinue = {
+            OnboardingScreen(navController, onContinue = {
                 navController.navigate(Screen.SignIn.route)
             })
         }
@@ -68,7 +68,7 @@ fun AppNavGraph(navController: NavHostController) {
 
             if (movie != null) {
                 // Pass the movieId to MovieDetailScreen
-                MovieDetailScreen(movie = movie, navController)
+                MovieDetailScreen(movie = movie, navController, movieViewModel)
             } else {
                 // Handle invalid movieId (you can show an error or navigate back)
                 println("Invalid movieId")

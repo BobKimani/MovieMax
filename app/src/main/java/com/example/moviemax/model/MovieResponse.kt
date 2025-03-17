@@ -8,3 +8,13 @@ data class MovieResponse(
     val total_pages: Int, // Total number of pages available
     val total_results: Int // Total number of results available
 )
+
+data class TrailerResponse(
+    val results: List<Trailer>
+)
+
+data class Trailer(
+    val key: String, // YouTube key
+    val site: String, // Youtube
+    val type: String // Trailer
+)

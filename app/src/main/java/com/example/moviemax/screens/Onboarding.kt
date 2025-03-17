@@ -2,8 +2,11 @@ package com.example.moviemax.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -18,13 +21,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.moviemax.R
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun OnboardingScreen(onContinue: () -> Unit) {
+fun OnboardingScreen(navController: NavController, onContinue: () -> Unit) {
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -36,7 +41,28 @@ fun OnboardingScreen(onContinue: () -> Unit) {
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // Horizontal Pager
+            // Back Button Row
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 50.dp, start = 8.dp)
+                    .clickable { navController.popBackStack() },  // Navigates back
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back",
+                    tint = Color.White
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = "Back",
+                    color = Color.White,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+
+            // Pager
             HorizontalPager(
                 count = 3,
                 state = pagerState,
@@ -49,7 +75,7 @@ fun OnboardingScreen(onContinue: () -> Unit) {
                 }
             }
 
-            // Navigation controls
+            // Bottom navigation controls
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -64,10 +90,10 @@ fun OnboardingScreen(onContinue: () -> Unit) {
                     }
                 }
 
-                // Next/Finish button with fixed visibility
+                // Next/Finish button
                 Box(
                     modifier = Modifier
-                        .size(80.dp) // Make sure the whole button is visible
+                        .size(80.dp)
                         .clip(CircleShape)
                         .background(Color.Transparent),
                     contentAlignment = Alignment.Center
@@ -83,8 +109,8 @@ fun OnboardingScreen(onContinue: () -> Unit) {
                             }
                         },
                         modifier = Modifier
-                            .size(100.dp) // Ensure button is large enough
-                            .padding(8.dp) // Keep it separate from any constraints
+                            .size(100.dp)
+                            .padding(8.dp)
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.button),
@@ -247,5 +273,5 @@ fun CircleIndicator(isSelected: Boolean) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewOnboarding() {
-    OnboardingScreen(onContinue = {})
+    OnboardingScreen(navController = rememberNavController(),onContinue = {})
 }

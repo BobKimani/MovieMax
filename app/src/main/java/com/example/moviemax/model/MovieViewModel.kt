@@ -1,13 +1,17 @@
 package com.example.moviemax.model
 
+import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviemax.api.RetrofitInstance
 import com.example.moviemax.config.AppConfig
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import androidx.compose.runtime.State
 
 class MovieViewModel : ViewModel() {
 
@@ -15,6 +19,9 @@ class MovieViewModel : ViewModel() {
 
     private val _movies = MutableStateFlow(MovieState()) // Holds UI state
     val movies: StateFlow<MovieState> = _movies
+
+    private val _movieTrailers = mutableStateOf<List<Trailer>>(emptyList())
+    val movieTrailers: State<List<Trailer>> get() = _movieTrailers
 
     fun fetchMovies() {
         viewModelScope.launch {
@@ -46,6 +53,18 @@ class MovieViewModel : ViewModel() {
 
     fun getMovieById(id: Int): Movie? {
         return _movies.value.data?.find { it.id == id }
+    }
+
+    fun fetchMovieTrailers(movieId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = apiService.getMovieTrailers(movieId, AppConfig.API_KEY)
+                val filteredTrailers = response.results.filter { it.site == "YouTube" && it.type == "Trailer" }
+                _movieTrailers.value = filteredTrailers
+            } catch (e: Exception) {
+                _movieTrailers.value = emptyList()
+            }
+        }
     }
 }
 

@@ -1,5 +1,7 @@
 package com.example.moviemax.screens
 
+import android.view.ViewGroup
+import android.webkit.WebView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,12 +11,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,23 +22,40 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.moviemax.model.Movie
+import com.example.moviemax.model.MovieViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovieDetailScreen(movie: Movie, navController: NavController) {
+fun MovieDetailScreen(
+    movie: Movie,
+    navController: NavController,
+    movieViewModel: MovieViewModel
+) {
+    val showTrailer = remember { mutableStateOf(false) }
+
+    // Fetch trailers
+    LaunchedEffect(movie.id) {
+        movieViewModel.fetchMovieTrailers(movie.id)
+    }
+
+    val trailers by movieViewModel.movieTrailers
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF1F1D2B)) // Dark background
+            .background(Color(0xFF1F1D2B))
             .padding(16.dp)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-
+            // Back Arrow Row
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -63,6 +78,7 @@ fun MovieDetailScreen(movie: Movie, navController: NavController) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            // Movie Poster
             Image(
                 painter = rememberAsyncImagePainter(movie.getPosterUrl()),
                 contentDescription = null,
@@ -77,6 +93,7 @@ fun MovieDetailScreen(movie: Movie, navController: NavController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Title
             Text(
                 text = movie.title,
                 style = MaterialTheme.typography.headlineMedium.copy(
@@ -88,6 +105,7 @@ fun MovieDetailScreen(movie: Movie, navController: NavController) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            // Rating Row
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
@@ -99,7 +117,6 @@ fun MovieDetailScreen(movie: Movie, navController: NavController) {
                     modifier = Modifier.size(20.dp)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
-
                 Text(
                     text = "${movie.voteAverage}",
                     style = MaterialTheme.typography.bodyLarge.copy(color = Color.White)
@@ -113,8 +130,9 @@ fun MovieDetailScreen(movie: Movie, navController: NavController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Play Button
             Button(
-                onClick = { },
+                onClick = { showTrailer.value = true },
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .height(50.dp),
@@ -128,7 +146,7 @@ fun MovieDetailScreen(movie: Movie, navController: NavController) {
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
-                    text = "Play",
+                    text = "Play Trailer",
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
                     color = Color.White
                 )
@@ -152,6 +170,37 @@ fun MovieDetailScreen(movie: Movie, navController: NavController) {
                 textAlign = TextAlign.Justify,
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
+        }
+
+        // Popup Trailer Dialog
+        if (showTrailer.value && trailers.isNotEmpty()) {
+            Dialog(onDismissRequest = { showTrailer.value = false }) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(400.dp)
+                        .background(Color.Black, shape = RoundedCornerShape(12.dp))
+                ) {
+                    val trailer = trailers[0]
+                    val videoUrl = "https://www.youtube.com/embed/${trailer.key}"
+
+                    AndroidView(
+                        factory = { context ->
+                            WebView(context).apply {
+                                layoutParams = ViewGroup.LayoutParams(
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    ViewGroup.LayoutParams.MATCH_PARENT
+                                )
+                                settings.javaScriptEnabled = true
+                                loadUrl(videoUrl)
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(12.dp))
+                    )
+                }
+            }
         }
     }
 }

@@ -2,7 +2,9 @@ package com.example.moviemax.api
 
 import com.example.moviemax.model.Movie
 import com.example.moviemax.model.MovieResponse
+import com.example.moviemax.model.TrailerResponse
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -23,4 +25,10 @@ interface ApiService {
         @Query("language") language: String = "en-US",
         @Query("page") page: Int = 1
     ): MovieResponse
+
+    @GET("movie/{movie_id}/videos")
+    suspend fun getMovieTrailers(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") apiKey: String
+    ): TrailerResponse
 }
